@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -25,17 +25,28 @@ public class User {
     @Length(min = 5, message = "*Your password must have at least 5 characters")
     @NotEmpty(message = "*Please provide your password")
     private String password;
-    @Column(name = "name")
-    @NotEmpty(message = "*Please provide your name")
-    private String name;
+    @Column(name = "username")
+    @NotEmpty(message = "*Please provide your username")
+    private String username;
     @Column(name = "last_name")
     @NotEmpty(message = "*Please provide your last name")
     private String lastName;
     @Column(name = "active")
     private int active;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List<Role> roles;
+
+    User() {}
+
+    public User(String username, String password, List<Role> roles, String email, String lastName) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.email = email;
+        this.lastName = lastName;
+    }
+
 
     public int getId() {
         return id;
@@ -53,12 +64,12 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getLastName() {
@@ -85,13 +96,11 @@ public class User {
         this.active = active;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
-
-
 }
