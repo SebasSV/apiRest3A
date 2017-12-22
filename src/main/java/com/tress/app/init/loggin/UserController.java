@@ -5,6 +5,8 @@ import com.tress.app.init.role.Role;
 import com.tress.app.init.user.User;
 import com.tress.app.init.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,11 @@ public class UserController {
 
         }
         return result;
+    }
+
+    @GetMapping("/getUsername")
+    public String getCurrentName(){
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 

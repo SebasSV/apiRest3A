@@ -1,5 +1,7 @@
 package com.tress.app.init.config;
 
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,13 +19,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/","/home","/register","/login").permitAll()
+                .antMatchers("/","/home","/register","/login","/posts").permitAll()
                 .antMatchers("/private/**").authenticated()
-                .antMatchers("/post").authenticated()
+                .antMatchers("/post").permitAll()
                 .antMatchers("/post/postComment").authenticated()
                 .antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN");
     }
-
 
 }
