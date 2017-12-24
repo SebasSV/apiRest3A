@@ -6,7 +6,7 @@ import com.tress.app.init.user.User;
 import com.tress.app.init.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenStore tokenStore;
 
     @GetMapping(value = "/users")
     public List<User> users(){
@@ -52,6 +55,12 @@ public class UserController {
     @GetMapping("/getUsername")
     public String getCurrentName(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    @GetMapping("/logouts")
+    public void logout(@RequestParam (value = "access_token") String accessToken){
+        tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken));
+
     }
 
 
