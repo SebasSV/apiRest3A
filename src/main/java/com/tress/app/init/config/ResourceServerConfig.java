@@ -12,20 +12,20 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
  *The @EnableResourceServer annotation adds a filter of type OAuth2AuthenticationProcessingFilter automatically
  *to the Spring Security filter chain.
  */
-@Configuration
-@EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+//@Configuration
+//@EnableResourceServer
+//public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/","/home","/register","/login","/posts").permitAll()
-                .antMatchers("/private/**").authenticated()
-                .antMatchers("/post").permitAll()
-                .antMatchers("/post/postComment").authenticated()
-                .antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN");
-    }
+//    @Override
+//    public void configure(HttpSecurity http) throws Exception {
+//        http
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/","/home","/register","/login","/posts").permitAll()
+//                .antMatchers("/private/**").authenticated()
+//                .antMatchers("/post").permitAll()
+//                .antMatchers("/post/postComment").authenticated()
+//                .antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN");
+//    }
 
-}
+//}
