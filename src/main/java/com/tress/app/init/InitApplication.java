@@ -15,6 +15,9 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoT
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -26,12 +29,20 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @EnableOAuth2Client
@@ -68,21 +79,33 @@ public class InitApplication extends WebSecurityConfigurerAdapter {
 	 */
 	private UserDetailsService userDetailsService(final UserRepository userRepository) {
 		return username -> new CustomUserDetails(userRepository.findByUsername(username));
-
 		//oauth/token?grant_type=password&username=admin&password=adminPassword
-
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// @formatter:off
-		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/webjars/**").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling()
-				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/")).and().logout()
-				.logoutSuccessUrl("/").permitAll().and().csrf()
-				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+	public void configure(HttpSecurity http) throws Exception {
+		http
+				.cors().and().csrf().disable()
+				.authorizeRequests()
+				.antMatchers("/","/home","/register","/login**","/posts").permitAll()
+				.antMatchers("/private/**").authenticated()
+				.antMatchers("/post").permitAll()
+				.antMatchers("/post/postComment").authenticated()
+				.antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN").and()
 				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
-		// @formatter:on
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		List<String> origins = Arrays.asList("*");
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(origins);
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 	private Filter ssoFilter() {
