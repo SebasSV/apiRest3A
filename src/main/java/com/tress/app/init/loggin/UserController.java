@@ -28,9 +28,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TokenStore tokenStore;
-
     @GetMapping(value = "/users")
     public List<User> users(){
         return userService.getAllUsers();
@@ -62,13 +59,5 @@ public class UserController {
     public String getCurrentName(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
-//    @RequestMapping("/")
-//    public RedirectView localRedirect() {
-//        RedirectView redirectView = new RedirectView();
-//        redirectView.setUrl("localhost:3000");
-//        return redirectView;
-//    }
-
 
 }

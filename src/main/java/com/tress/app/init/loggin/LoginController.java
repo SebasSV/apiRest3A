@@ -18,10 +18,5 @@ public class LoginController {
         return "done";
     }
 
-//    @PostMapping(value = "/login")
-//    @ResponseBody
-//    private String login(){
-//        return "done";
-//    }
 
 }
