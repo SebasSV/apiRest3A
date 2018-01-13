@@ -2,26 +2,23 @@ package com.tress.app.init;
 
 import com.tress.app.init.config.CustomUserDetails;
 import com.tress.app.init.config.WebMvcConfig;
-import com.tress.app.init.role.Role;
-import com.tress.app.init.user.User;
-import com.tress.app.init.user.UserRepository;
-import com.tress.app.init.user.service.UserService;
+import com.tress.app.init.entities.role.Role;
+import com.tress.app.init.entities.user.User;
+import com.tress.app.init.entities.user.UserRepository;
+import com.tress.app.init.entities.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -29,18 +26,13 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -107,6 +99,20 @@ public class InitApplication extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+
+	@Bean
+     public FilterRegistrationBean filterRegistrationBean() {
+		        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		        CorsConfiguration config = new CorsConfiguration();
+		        config.setAllowCredentials(true);
+		        config.addAllowedOrigin("*");
+		        config.addAllowedHeader("*");
+		        config.addAllowedMethod("*");
+		        source.registerCorsConfiguration("/**", config);
+		        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+		        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		        return bean;
+		    }
 
 	private Filter ssoFilter() {
 		OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter(

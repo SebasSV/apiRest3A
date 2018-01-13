@@ -1,6 +1,6 @@
-package com.tress.app.init.user.service;
+package com.tress.app.init.entities.user.service;
 
-import com.tress.app.init.user.User;
+import com.tress.app.init.entities.user.User;
 
 import java.util.List;
 

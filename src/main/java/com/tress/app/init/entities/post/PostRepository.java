@@ -1,4 +1,4 @@
-package com.tress.app.init.entities;
+package com.tress.app.init.entities.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

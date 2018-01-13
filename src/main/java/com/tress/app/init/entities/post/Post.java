@@ -1,6 +1,6 @@
-package com.tress.app.init.entities;
+package com.tress.app.init.entities.post;
 
-import com.tress.app.init.user.User;
+import com.tress.app.init.entities.user.User;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -23,6 +23,8 @@ public class Post {
     private String body;
     @Column(name="createdDate")
     private Date createdDate;
+    @Column(name="urlImage")
+    private String urlImage;
     @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinTable(name = "user_post", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;

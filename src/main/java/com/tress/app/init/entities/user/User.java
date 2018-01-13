@@ -1,7 +1,7 @@
-package com.tress.app.init.user;
+package com.tress.app.init.entities.user;
 
 
-import com.tress.app.init.role.Role;
+import com.tress.app.init.entities.role.Role;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -31,6 +31,10 @@ public class User {
     @Column(name = "last_name")
     @NotEmpty(message = "*Please provide your last name")
     private String lastName;
+    @Column(name = "profession")
+    private String profession;
+    @Column(name = "avatar_url")
+    private String avatarUrl;
     @Column(name = "active")
     private int active;
     @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
@@ -102,5 +106,21 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }

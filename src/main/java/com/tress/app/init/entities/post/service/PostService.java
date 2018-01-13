@@ -1,7 +1,6 @@
-package com.tress.app.init.entities.service;
+package com.tress.app.init.entities.post.service;
 
-import com.tress.app.init.entities.Post;
-import javafx.geometry.Pos;
+import com.tress.app.init.entities.post.Post;
 
 import java.util.List;
 

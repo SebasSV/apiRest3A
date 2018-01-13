@@ -2,9 +2,9 @@ package com.tress.app.init.loggin;
 
 
 import com.tress.app.init.config.CustomUserDetails;
-import com.tress.app.init.entities.Post;
-import com.tress.app.init.entities.service.PostService;
-import com.tress.app.init.user.service.UserService;
+import com.tress.app.init.entities.post.Post;
+import com.tress.app.init.entities.post.service.PostService;
+import com.tress.app.init.entities.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;

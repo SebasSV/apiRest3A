@@ -1,16 +1,22 @@
 package com.tress.app.init.loggin;
 
 
-import com.tress.app.init.role.Role;
-import com.tress.app.init.user.User;
-import com.tress.app.init.user.service.UserService;
+import com.tress.app.init.entities.role.Role;
+import com.tress.app.init.entities.user.User;
+import com.tress.app.init.entities.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.print.DocFlavor;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -57,11 +63,12 @@ public class UserController {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    @GetMapping("/logouts")
-    public void logout(@RequestParam (value = "access_token") String accessToken){
-        tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken));
-
-    }
+//    @RequestMapping("/")
+//    public RedirectView localRedirect() {
+//        RedirectView redirectView = new RedirectView();
+//        redirectView.setUrl("localhost:3000");
+//        return redirectView;
+//    }
 
 
 }

@@ -1,7 +1,7 @@
 package com.tress.app.init.config;
 
-import com.tress.app.init.role.Role;
-import com.tress.app.init.user.User;
+import com.tress.app.init.entities.role.Role;
+import com.tress.app.init.entities.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

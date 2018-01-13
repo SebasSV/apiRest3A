@@ -1,4 +1,4 @@
-package com.tress.app.init.role;
+package com.tress.app.init.entities.role;
 
 
 import javax.persistence.*;
