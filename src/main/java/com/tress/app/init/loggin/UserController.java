@@ -1,6 +1,7 @@
 package com.tress.app.init.loggin;
 
 
+import com.tress.app.init.config.CustomUserDetails;
 import com.tress.app.init.entities.role.Role;
 import com.tress.app.init.entities.user.User;
 import com.tress.app.init.entities.user.service.UserService;
@@ -56,8 +57,8 @@ public class UserController {
     }
 
     @GetMapping("/getUsername")
-    public String getCurrentName(){
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    public CustomUserDetails getCurrentName(){
+        return  (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

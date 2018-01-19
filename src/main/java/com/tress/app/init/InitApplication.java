@@ -26,6 +26,8 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -37,14 +39,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-@EnableOAuth2Client
-public class InitApplication extends WebSecurityConfigurerAdapter {
+@EnableResourceServer
+public class InitApplication extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	private WebMvcConfig webMvcConfig;
-
-	@Autowired
-	private OAuth2ClientContext oauth2ClientContext;
 
 	public static void main(String[] args) {
 		SpringApplication.run(InitApplication.class, args);
@@ -77,73 +76,10 @@ public class InitApplication extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
-				.cors().and().csrf().disable()
+				.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/","/home","/register","/login**","/posts").permitAll()
-				.antMatchers("/private/**").authenticated()
-				.antMatchers("/post").permitAll()
-				.antMatchers("/post/postComment").authenticated()
-				.antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN").and()
-				.addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
-	}
-
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		List<String> origins = Arrays.asList("*");
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(origins);
-		configuration.addAllowedHeader("*");
-		configuration.addAllowedMethod("*");
-		configuration.setAllowCredentials(true);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
-
-	@Bean
-     public FilterRegistrationBean filterRegistrationBean() {
-		        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		        CorsConfiguration config = new CorsConfiguration();
-		        config.setAllowCredentials(true);
-		        config.addAllowedOrigin("*");
-		        config.addAllowedHeader("*");
-		        config.addAllowedMethod("*");
-		        source.registerCorsConfiguration("/**", config);
-		        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-		        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-		        return bean;
-		    }
-
-	private Filter ssoFilter() {
-		OAuth2ClientAuthenticationProcessingFilter facebookFilter = new OAuth2ClientAuthenticationProcessingFilter(
-				"/login/facebook");
-		OAuth2RestTemplate facebookTemplate = new OAuth2RestTemplate(facebook(), oauth2ClientContext);
-		facebookFilter.setRestTemplate(facebookTemplate);
-		UserInfoTokenServices tokenServices = new UserInfoTokenServices(facebookResource().getUserInfoUri(),
-				facebook().getClientId());
-		tokenServices.setRestTemplate(facebookTemplate);
-		facebookFilter.setTokenServices(
-				new UserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId()));
-		return facebookFilter;
-	}
-
-	@Bean
-	public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(filter);
-		registration.setOrder(-100);
-		return registration;
-	}
-
-	@Bean
-	@ConfigurationProperties("facebook.client")
-	public AuthorizationCodeResourceDetails facebook() {
-		return new AuthorizationCodeResourceDetails();
-	}
-
-	@Bean
-	@ConfigurationProperties("facebook.resource")
-	public ResourceServerProperties facebookResource() {
-		return new ResourceServerProperties();
+				.antMatchers("/","/home","/register","/login","/posts").permitAll()
+				.antMatchers("/userPost").permitAll()
+				.antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN");
 	}
 }

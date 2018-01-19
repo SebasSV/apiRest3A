@@ -15,7 +15,6 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@ComponentScan
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -27,6 +26,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     public SessionFactory sessionFactory(HibernateEntityManagerFactory hemf){
         return hemf.getSessionFactory();
+    }
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
     }
 
 
