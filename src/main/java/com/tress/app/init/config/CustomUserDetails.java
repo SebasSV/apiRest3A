@@ -19,12 +19,14 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private String username;
     private String avatar;
+    private Integer id;
 
     public CustomUserDetails(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.authorities = translate(user.getRoles());
         this.avatar = user.getAvatarUrl();
+        this.id = user.getId();
     }
 
     /**
@@ -62,6 +64,8 @@ public class CustomUserDetails implements UserDetails {
     public String getAvatar() {
         return avatar;
     }
+
+    public Integer getId() { return id; }
 
     @Override
     public boolean isAccountNonExpired() {

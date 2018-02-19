@@ -80,6 +80,7 @@ public class InitApplication extends ResourceServerConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/","/home","/register","/login","/posts").permitAll()
 				.antMatchers("/userPost").permitAll()
+				.antMatchers("/userPost/**").authenticated()
 				.antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN");
 	}
 }

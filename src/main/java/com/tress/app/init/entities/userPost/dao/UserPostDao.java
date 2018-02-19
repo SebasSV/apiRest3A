@@ -7,4 +7,6 @@ import java.util.List;
 public interface UserPostDao {
 
     List<UserPost> findAll();
+
+    List<UserPost> findByUserId(Integer userId);
 }
