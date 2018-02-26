@@ -37,11 +37,7 @@ public class AmazonS3UtilityUtilityImpl implements AmazonS3Utility {
 
         try {
             System.out.println("Uploading a new object to S3 from a file\n");
-//            File file2 = new File(uploadFileName);
             s3client.putObject(new PutObjectRequest( bucketName, keyName, file));
-
-//            InputStream is= file.getInputStream();
-//            s3client.putObject(new PutObjectRequest(bucketName, keyName,is,new ObjectMetadata()));
 
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which " +
