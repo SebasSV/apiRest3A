@@ -8,18 +8,22 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.tress.app.init.utilities.AmazonS3Utility;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class AmazonS3UtilityUtilityImpl implements AmazonS3Utility {
 
     private static String bucketName     = "test-image-container";
     private static String keyName        = "TJES4DPSTA4RTZH3EXNE";
-    //private static String uploadFileName = "/Users/home/Downloads/success.jpg";
+    private static String uploadFileName = "/Users/home/Downloads/success.jpg";
 
     @Override
     public void uploadImageDigitalOcean(File file) {
@@ -33,9 +37,11 @@ public class AmazonS3UtilityUtilityImpl implements AmazonS3Utility {
 
         try {
             System.out.println("Uploading a new object to S3 from a file\n");
-            //File file = new File(uploadFileName);
-            s3client.putObject(new PutObjectRequest(
-                    bucketName, keyName, file));
+//            File file2 = new File(uploadFileName);
+            s3client.putObject(new PutObjectRequest( bucketName, keyName, file));
+
+//            InputStream is= file.getInputStream();
+//            s3client.putObject(new PutObjectRequest(bucketName, keyName,is,new ObjectMetadata()));
 
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which " +
