@@ -44,6 +44,7 @@ public class PostController {
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         ServletFileUpload.isMultipartContent(request);
+        String url = "";
 
 
         MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
@@ -55,7 +56,7 @@ public class PostController {
 
         try {
             if(multipartFile != null){
-                amazonS3Utility.uploadImageDigitalOcean(this.multipartToFile(multipartFile));
+                url = amazonS3Utility.uploadImageDigitalOcean(this.multipartToFile(multipartFile));
             }
         }
         catch (IllegalStateException iae){
@@ -65,11 +66,14 @@ public class PostController {
             ioe.printStackTrace();
         }
 
+        Post post = new Post();
+        if(post.getCreatedDate() == null)
+            post.setCreatedDate(new Date());
 
-//        if(post.getCreatedDate() == null)
-//            post.setCreatedDate(new Date());
-//        post.setUse r(userService.getUser(userDetails.getUsername()));
-//        postService.insert(post);
+        post.setUser(userService.getUser(userDetails.getUsername()));
+        post.setUrlImage(url);
+        postService.insert(post);
+
         return "Post was published";
     }
 

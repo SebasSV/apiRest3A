@@ -22,11 +22,10 @@ import java.io.InputStream;
 public class AmazonS3UtilityUtilityImpl implements AmazonS3Utility {
 
     private static String bucketName     = "test-image-container";
-    private static String keyName        = "TJES4DPSTA4RTZH3EXNE";
     private static String uploadFileName = "/Users/home/Downloads/success.jpg";
 
     @Override
-    public void uploadImageDigitalOcean(File file) {
+    public String uploadImageDigitalOcean(File file) {
 
         AWSCredentials credentials = new BasicAWSCredentials( "TJES4DPSTA4RTZH3EXNE", "+1NV5fp37Mj1rgPgv43ZpY7dv2fS4rhNQnPL1bogC3k");
         AmazonS3 s3client = AmazonS3ClientBuilder.standard()
@@ -34,10 +33,12 @@ public class AmazonS3UtilityUtilityImpl implements AmazonS3Utility {
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
 
+        String keyName = file.getName();
+
 
         try {
             System.out.println("Uploading a new object to S3 from a file\n");
-            s3client.putObject(new PutObjectRequest( bucketName, keyName, file));
+//            s3client.putObject(new PutObjectRequest( bucketName, "success.jpg", file));
 
         } catch (AmazonServiceException ase) {
             System.out.println("Caught an AmazonServiceException, which " +
@@ -57,5 +58,7 @@ public class AmazonS3UtilityUtilityImpl implements AmazonS3Utility {
                     "such as not being able to access the network.");
             System.out.println("Error Message: " + ace.getMessage());
         }
+
+        return "https://test-image-container.nyc3.digitaloceanspaces.com/"+keyName;
     }
 }

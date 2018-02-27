@@ -71,4 +71,12 @@ public class Post {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
 }

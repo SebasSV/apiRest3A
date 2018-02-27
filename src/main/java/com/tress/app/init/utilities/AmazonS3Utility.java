@@ -10,5 +10,5 @@ public interface AmazonS3Utility {
      * DIGITAL OCEAN
      */
 
-    void uploadImageDigitalOcean(File file);
+    String uploadImageDigitalOcean(File file);
 }
